@@ -210,11 +210,11 @@
   </div>
 
   <div class="results">
-    <div class="rcard">
+    <div class="rcard" id="rcard-accounts">
       <div class="rcard-label">Accounts</div>
       <div class="rcard-val" id="rv-accounts">—</div>
     </div>
-    <div class="rcard">
+    <div class="rcard" id="rcard-posts">
       <div class="rcard-label" id="rc-posts-label">Posts / day</div>
       <div class="rcard-val" id="rv-posts">—</div>
     </div>
@@ -296,6 +296,8 @@
   const platformRow = document.getElementById('platform-row');
   const resultPeriodToggle = document.getElementById('result-period-toggle');
   const rcardViews = document.getElementById('rcard-views');
+  const rcardAccounts = document.getElementById('rcard-accounts');
+  const rcardPosts = document.getElementById('rcard-posts');
   const platformNote = document.getElementById('platform-note');
   const rvA  = document.getElementById('rv-accounts');
   const rvPo = document.getElementById('rv-posts');
@@ -405,6 +407,9 @@
     inputUnit.textContent = 'accounts';
     platformRow.classList.toggle('visible', src === 'accounts');
     rcardViews.style.display = src === 'views' ? 'none' : '';
+    rcardAccounts.style.display = src === 'accounts' ? 'none' : '';
+    // when Accounts is hidden, let Posts fill the row
+    rcardPosts.style.gridColumn = src === 'accounts' ? 'span 2' : '';
     resultPeriodToggle.style.display = src === 'views' ? 'none' : '';
     if (src === 'views') setResultPeriod(periodVal);
   }
