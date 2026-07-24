@@ -122,17 +122,13 @@
   .platform-note.highlight { color: rgba(255,255,255,0.65); }
 
   /* RESULTS */
-  .results { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem; }
+  .results { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 2rem; }
   .rcard { background: var(--cbg); border: 1px solid var(--cbr); border-radius: 16px; padding: 16px 18px; }
   .rcard.big { grid-column: span 2; background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.3); }
   .rcard-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--w40); margin-bottom: 6px; }
   .rcard.big .rcard-label { color: rgba(255,255,255,0.6); }
   .rcard-val { font-family: var(--mono); font-size: 22px; font-weight: 500; color: var(--w100); line-height: 1; }
   .rcard.big .rcard-val { font-size: 36px; }
-
-  .chain { font-size: 12px; color: var(--w40); line-height: 2; margin-bottom: 2rem; min-height: 24px; }
-  .chain b { color: var(--w70); font-weight: 600; }
-  .chain .hi { color: var(--w100); font-weight: 600; }
 
   /* VARIABLES */
   .vars-section { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.25rem; }
@@ -222,7 +218,7 @@
       <div class="rcard-label" id="rc-posts-label">Posts / day</div>
       <div class="rcard-val" id="rv-posts">—</div>
     </div>
-    <div class="rcard big">
+    <div class="rcard big" id="rcard-views">
       <div class="rcard-label" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
         <span id="rc-views-label">Views</span>
         <div class="pill-toggle" id="result-period-toggle" style="gap:2px;padding:2px;">
@@ -234,8 +230,6 @@
       <div class="rcard-val" id="rv-views">—</div>
     </div>
   </div>
-
-  <div class="chain" id="chain"></div>
 
   <div class="vars-section">
     <div class="vars-header" id="vars-toggle">
@@ -301,11 +295,11 @@
   const sourceHint = document.getElementById('source-hint');
   const platformRow = document.getElementById('platform-row');
   const resultPeriodToggle = document.getElementById('result-period-toggle');
+  const rcardViews = document.getElementById('rcard-views');
   const platformNote = document.getElementById('platform-note');
   const rvA  = document.getElementById('rv-accounts');
   const rvPo = document.getElementById('rv-posts');
   const rvV  = document.getElementById('rv-views');
-  const chainEl = document.getElementById('chain');
   const vPP = document.getElementById('var-pp');
   const vIP = document.getElementById('var-ip');
 
@@ -396,7 +390,6 @@
 
   function clearResults() {
     [rvA, rvPo, rvV].forEach(el => el.textContent = '—');
-    chainEl.innerHTML = '';
   }
 
   function updateSourceUI() {
@@ -411,6 +404,7 @@
     inputUnit.style.display = src === 'views' ? 'none' : '';
     inputUnit.textContent = 'accounts';
     platformRow.classList.toggle('visible', src === 'accounts');
+    rcardViews.style.display = src === 'views' ? 'none' : '';
     resultPeriodToggle.style.display = src === 'views' ? 'none' : '';
     if (src === 'views') setResultPeriod(periodVal);
   }
@@ -428,7 +422,6 @@
 
     const {pp, ip} = getV();
     const mult = getPeriod();
-    const pl = getPeriodLabel();
     const platMult = getPlatformMultiplier();
     let accounts, postsDay, viewsDay;
 
@@ -447,11 +440,6 @@
     lastViewsDay = viewsDay;
     const rMult = parseInt(resultPeriodVal) || 1;
     rvV.textContent  = fmt(viewsDay * rMult);
-
-    chainEl.innerHTML =
-      `<b>${fmtFull(accounts)}</b> accounts → ` +
-      `<b>${fmt(postsDay * mult)}</b> posts${pl} → ` +
-      `<span class="hi">${fmt(viewsDay * mult)} views${pl}</span>`;
   }
 
   // source handled by setSource()
