@@ -282,6 +282,7 @@
   function setPeriod(val) {
     periodVal = val;
     document.querySelectorAll('#period-toggle .pill-toggle-btn').forEach(b => b.classList.toggle('active', b.dataset.val === val));
+    if (sourceVal === 'views') setResultPeriod(val);
     updateResultLabels();
     run();
   }
@@ -299,6 +300,7 @@
   const inputUnit  = document.getElementById('input-unit');
   const sourceHint = document.getElementById('source-hint');
   const platformRow = document.getElementById('platform-row');
+  const resultPeriodToggle = document.getElementById('result-period-toggle');
   const platformNote = document.getElementById('platform-note');
   const rvA  = document.getElementById('rv-accounts');
   const rvPo = document.getElementById('rv-posts');
@@ -409,6 +411,8 @@
     inputUnit.style.display = src === 'views' ? 'none' : '';
     inputUnit.textContent = 'accounts';
     platformRow.classList.toggle('visible', src === 'accounts');
+    resultPeriodToggle.style.display = src === 'views' ? 'none' : '';
+    if (src === 'views') setResultPeriod(periodVal);
   }
 
   function updateResultLabels() {
